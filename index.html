@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="shortcut icon" href="./images/favicon.svg" type="image/x-icon" />
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <title>PH-Tube</title>
+  </head>
+  <body class="container mx-auto px-3">
+    <!-- Navbar  -->
+    <div class="w-full flex justify-between items-center py-8 border-b">
+      <img src="./images/logo.png" alt="logo" class="hidden sm:block" />
+      <img src="./images/favicon.svg" alt="logo" class="sm:hidden" />
+
+      <button class="p-2 sm:px-3 font-medium bg-neutral-300 rounded-md">
+        Sort by view
+      </button>
+      <button
+        class="p-2 sm:px-4 font-normal text-white bg-[#ff1f3d] rounded-md">
+        Blog
+      </button>
+    </div>
+
+    <!-- Category Bar -->
+    <ul
+      class="w-full flex justify-center gap-4 items-center my-5 text-sm font-normal">
+      <li class="px-4 rounded-sm cursor-pointer py-1 bg-[#ff1f3d] text-white">
+        All
+      </li>
+      <li class="px-4 rounded-sm cursor-pointer py-1 bg-neutral-300">Video</li>
+      <li class="px-4 rounded-sm cursor-pointer py-1 bg-neutral-300">Video</li>
+      <li class="px-4 rounded-sm cursor-pointer py-1 bg-neutral-300">Video</li>
+    </ul>
+
+    <!-- Videos  -->
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+      <div class="w-full overflow-hidden rounded-md">
+        <img
+          src="https://i.ibb.co/L1b6xSq/shape.jpg"
+          alt=""
+          class="w-full h-[220px] rounded-md" />
+
+        <div class="flex justify-start items-start my-4 gap-2">
+          <img
+            src="https://i.ibb.co/D9wWRM6/olivia.jpg"
+            alt=""
+            class="h-10 w-10 ov rounded-full mt-1" />
+          <div class="">
+            <h1 class="font-bold text-lg line-clamp-2 leading-7">
+              Building a Winning UX Strategy Using the Kano Model
+            </h1>
+            <div
+              class="flex justify-start text-sm items-center gap-2 text-neutral-400">
+              <p>Awlad Hossain</p>
+              <img src="./images/verified.svg" alt="" />
+            </div>
+            <p class="text-neutral-400 text-sm">91K views</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div
+      class="w-full flex flex-col justify-center items-center h-[600px] hidden">
+      <img src="./images/notfound.svg" alt="notfound" />
+      <h1 class="font-bold text-2xl max-w-[300px] text-center">
+        Oops!! Sorry, There is no content here
+      </h1>
+    </div>
+
+    <script src="./script.js"></script>
+  </body>
+</html>
