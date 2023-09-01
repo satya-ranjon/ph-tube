@@ -1,4 +1,10 @@
+const videosList = document.getElementById("videos");
+const notFound = document.getElementById("notFound");
+const loader = document.getElementById("loading");
+const categoryLists = document.getElementById("category_lists");
+
 let selectedCategory = "1000";
+let videoDataList = [];
 
 const fetchData = async (url) => {
   try {
@@ -14,8 +20,6 @@ const fetchData = async (url) => {
 
 const handleCategoryData = async () => {
   try {
-    const categoryLists = document.getElementById("category_lists");
-
     const { data: categories } = await fetchData(
       "https://openapi.programming-hero.com/api/videos/categories"
     );
@@ -53,28 +57,45 @@ const selectVideoCategory = (categories, item) => {
   handleVideosData();
 };
 
+document.getElementById("sortVideos").addEventListener("click", () => {
+  clearData();
+  videoSortDataDisplay();
+});
+
 const handleVideosData = async () => {
   try {
-    const videosList = document.getElementById("videos");
-    const notFound = document.getElementById("notFound");
-    const loader = document.getElementById("loading");
-
     loader.classList.remove("hidden");
-
-    const { data: videos } = await fetchData(
+    const { data } = await fetchData(
       `https://openapi.programming-hero.com/api/videos/category/${selectedCategory}`
     );
+    videoDataList = data;
 
     loader.classList.add("hidden");
 
-    if (videos.length === 0) {
+    if (videoDataList.length === 0) {
       notFound.classList.remove("hidden");
     } else {
       notFound.classList.add("hidden");
-      videos.forEach((video) => {
-        const div = document.createElement("div");
-        div.className = "w-full overflow-hidden rounded-md";
-        div.innerHTML = `
+      videoDataList.forEach(singleVideo);
+    }
+  } catch (err) {
+    console.error("Error Videos Fetch Data", err);
+  }
+};
+
+const videoSortDataDisplay = () => {
+  const sortedData = videoDataList?.sort((a, b) => {
+    const vA = parseFloat(a.others.views.slice(0, -1));
+    const vB = parseFloat(b.others.views.slice(0, -1));
+    return vB - vA;
+  });
+  sortedData.forEach(singleVideo);
+};
+
+const singleVideo = (video) => {
+  const div = document.createElement("div");
+  div.className = "w-full overflow-hidden rounded-md";
+  div.innerHTML = `
         <div class="w-full relative">
           <img
             src=${video.thumbnail}
@@ -112,12 +133,7 @@ const handleVideosData = async () => {
         </div>
         
         `;
-        videosList.appendChild(div);
-      });
-    }
-  } catch (err) {
-    console.error("Error Videos Fetch Data", err);
-  }
+  videosList.appendChild(div);
 };
 
 const clearData = () => {
@@ -130,5 +146,5 @@ function convertTime(value) {
   return `${h > 0 ? `${h}hrs ` : 0} ${m > 0 && ` ${m}min`}`;
 }
 
-handleVideosData();
 handleCategoryData();
+handleVideosData();
