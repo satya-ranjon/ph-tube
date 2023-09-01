@@ -27,17 +27,30 @@ const handleCategoryData = async () => {
         selectedCategory === item.category_id && "bg-[#FF1F3D] text-white"
       }`;
       listItem.textContent = item.category;
-      listItem.addEventListener("click", () => {
-        console.log(`You clicked on ${item.category}`);
-        selectedCategory = item.category_id;
-        clearData();
-        handleVideosData();
-      });
+      listItem.addEventListener("click", () =>
+        selectVideoCategory(categories, item)
+      );
       categoryLists.appendChild(listItem);
     });
   } catch (err) {
     console.error("Error Category Fetch Data", err);
   }
+};
+
+const selectVideoCategory = (categories, item) => {
+  selectedCategory = item.category_id;
+  clearData();
+
+  categories.forEach((category) => {
+    const categoryItem = document.getElementById(category.category_id);
+    if (category.category_id === selectedCategory) {
+      categoryItem.classList.add("bg-[#FF1F3D]", "text-white");
+    } else {
+      categoryItem.classList.remove("bg-[#FF1F3D]", "text-white");
+    }
+  });
+
+  handleVideosData();
 };
 
 const handleVideosData = async () => {
@@ -89,7 +102,6 @@ const handleVideosData = async () => {
                 video.authors[0].verified === true &&
                 `<img src="./images/verified.svg" alt="verified" />`
               }
-            
             </div>
             <p class="text-neutral-400 text-sm">${video.others.views} views</p>
           </div>
@@ -110,20 +122,3 @@ const clearData = () => {
 
 handleVideosData();
 handleCategoryData();
-
-// {
-//   "category_id": "1001",
-//   "thumbnail": "https://i.ibb.co/L1b6xSq/shape.jpg",
-//   "title": "Shape of You",
-//   "authors": [
-//     {
-//       "profile_picture": "https://i.ibb.co/D9wWRM6/olivia.jpg",
-//       "profile_name": "Olivia Mitchell",
-//       "verified": ""
-//     }
-//   ],
-//   "others": {
-//     "views": "100K",
-//     "posted_date": "16278"
-//   }
-// },
