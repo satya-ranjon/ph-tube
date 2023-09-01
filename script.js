@@ -80,10 +80,14 @@ const handleVideosData = async () => {
             src=${video.thumbnail}
             alt="thumbnail"
             class="w-full h-[220px] rounded-md" />
-          <div
-            class="p-2 bg-neutral-800 text-white absolute bottom-4 right-4 rounded-md text-sm">
-            3hrs 56 min ago
-          </div>
+            ${
+              video.others.posted_date &&
+              `<div
+                class="p-2 bg-neutral-800 text-white absolute bottom-4 right-4 rounded-md text-sm">
+                ${convertTime(video.others.posted_date)} ago
+              </div>`
+            }
+      
         </div>
 
         <div class="flex justify-start items-start my-4 gap-2">
@@ -119,6 +123,12 @@ const handleVideosData = async () => {
 const clearData = () => {
   document.getElementById("videos").innerHTML = "";
 };
+
+function convertTime(value) {
+  const h = Math.floor(parseInt(value) / 3600);
+  const m = Math.floor((parseInt(value) % 3600) / 60);
+  return `${h > 0 ? `${h}hrs ` : 0} ${m > 0 && ` ${m}min`}`;
+}
 
 handleVideosData();
 handleCategoryData();
