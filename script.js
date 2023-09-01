@@ -1,3 +1,5 @@
+let selectedCategory = "1000";
+
 const fetchData = async (url) => {
   try {
     const res = await fetch(url);
@@ -13,14 +15,24 @@ const fetchData = async (url) => {
 const handleCategoryData = async () => {
   try {
     const categoryLists = document.getElementById("category_lists");
+
     const { data: categories } = await fetchData(
       "https://openapi.programming-hero.com/api/videos/categories"
     );
-    categories.forEach((itemText) => {
+
+    categories.forEach((item) => {
       const listItem = document.createElement("li");
-      listItem.id = itemText.category_id;
-      listItem.className = "px-4 rounded-sm cursor-pointer py-1 bg-neutral-300";
-      listItem.textContent = itemText.category;
+      listItem.id = item.category_id;
+      listItem.className = `px-4 rounded-sm cursor-pointer py-1 bg-neutral-300 ${
+        selectedCategory === item.category_id && "bg-[#FF1F3D] text-white"
+      }`;
+      listItem.textContent = item.category;
+      listItem.addEventListener("click", () => {
+        console.log(`You clicked on ${item.category}`);
+        selectedCategory = item.category_id;
+        clearData();
+        handleVideosData();
+      });
       categoryLists.appendChild(listItem);
     });
   } catch (err) {
@@ -28,4 +40,90 @@ const handleCategoryData = async () => {
   }
 };
 
+const handleVideosData = async () => {
+  try {
+    const videosList = document.getElementById("videos");
+    const notFound = document.getElementById("notFound");
+    const loader = document.getElementById("loading");
+
+    loader.classList.remove("hidden");
+
+    const { data: videos } = await fetchData(
+      `https://openapi.programming-hero.com/api/videos/category/${selectedCategory}`
+    );
+
+    loader.classList.add("hidden");
+
+    if (videos.length === 0) {
+      notFound.classList.remove("hidden");
+    } else {
+      notFound.classList.add("hidden");
+      videos.forEach((video) => {
+        const div = document.createElement("div");
+        div.className = "w-full overflow-hidden rounded-md";
+        div.innerHTML = `
+        <div class="w-full relative">
+          <img
+            src=${video.thumbnail}
+            alt="thumbnail"
+            class="w-full h-[220px] rounded-md" />
+          <div
+            class="p-2 bg-neutral-800 text-white absolute bottom-4 right-4 rounded-md text-sm">
+            3hrs 56 min ago
+          </div>
+        </div>
+
+        <div class="flex justify-start items-start my-4 gap-2">
+          <img
+            src=${video.authors[0].profile_picture}
+            alt="profile_name"
+            class="h-10 w-10 ov rounded-full mt-1" />
+          <div class="">
+            <h1 class="font-bold text-lg line-clamp-2 leading-7">
+              ${video.title}
+            </h1>
+            <div
+              class="flex justify-start text-sm items-center gap-2 text-neutral-400">
+              <p>${video.authors[0].profile_name}</p>
+              ${
+                video.authors[0].verified === true &&
+                `<img src="./images/verified.svg" alt="verified" />`
+              }
+            
+            </div>
+            <p class="text-neutral-400 text-sm">${video.others.views} views</p>
+          </div>
+        </div>
+        
+        `;
+        videosList.appendChild(div);
+      });
+    }
+  } catch (err) {
+    console.error("Error Videos Fetch Data", err);
+  }
+};
+
+const clearData = () => {
+  document.getElementById("videos").innerHTML = "";
+};
+
+handleVideosData();
 handleCategoryData();
+
+// {
+//   "category_id": "1001",
+//   "thumbnail": "https://i.ibb.co/L1b6xSq/shape.jpg",
+//   "title": "Shape of You",
+//   "authors": [
+//     {
+//       "profile_picture": "https://i.ibb.co/D9wWRM6/olivia.jpg",
+//       "profile_name": "Olivia Mitchell",
+//       "verified": ""
+//     }
+//   ],
+//   "others": {
+//     "views": "100K",
+//     "posted_date": "16278"
+//   }
+// },
