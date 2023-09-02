@@ -3,9 +3,10 @@ const notFound = document.getElementById("notFound");
 const loader = document.getElementById("loading");
 const categoryLists = document.getElementById("category_lists");
 
-let selectedCategory = "1000";
+let selectedCategory;
 let videoDataList = [];
 
+//  Handle Fetch Data
 const fetchData = async (url) => {
   try {
     const res = await fetch(url);
@@ -18,11 +19,18 @@ const fetchData = async (url) => {
   }
 };
 
+//  Handle Category Data
 const handleCategoryData = async () => {
   try {
     const { data: categories } = await fetchData(
       "https://openapi.programming-hero.com/api/videos/categories"
     );
+
+    // select first category
+    selectedCategory = categories[0].category_id;
+
+    // call handleVideosData
+    handleVideosData();
 
     categories.forEach((item) => {
       const listItem = document.createElement("li");
@@ -41,6 +49,7 @@ const handleCategoryData = async () => {
   }
 };
 
+// Handle Selected Videos by Category
 const selectVideoCategory = (categories, item) => {
   selectedCategory = item.category_id;
   clearData();
@@ -57,11 +66,13 @@ const selectVideoCategory = (categories, item) => {
   handleVideosData();
 };
 
+// Sort videos by views
 document.getElementById("sortVideos").addEventListener("click", () => {
   clearData();
   videoSortDataDisplay();
 });
 
+// Handle Videos Data
 const handleVideosData = async () => {
   try {
     loader.classList.remove("hidden");
@@ -83,6 +94,7 @@ const handleVideosData = async () => {
   }
 };
 
+// Sort Videos
 const videoSortDataDisplay = () => {
   const sortedData = videoDataList?.sort((a, b) => {
     const vA = parseFloat(a.others.views.slice(0, -1));
@@ -92,6 +104,7 @@ const videoSortDataDisplay = () => {
   sortedData.forEach(singleVideo);
 };
 
+// Display Single video
 const singleVideo = (video) => {
   const div = document.createElement("div");
   div.className = "w-full overflow-hidden rounded-md";
@@ -136,15 +149,17 @@ const singleVideo = (video) => {
   videosList.appendChild(div);
 };
 
+// clear Videos Data
 const clearData = () => {
   document.getElementById("videos").innerHTML = "";
 };
 
+// Convert s to h & m
 function convertTime(value) {
   const h = Math.floor(parseInt(value) / 3600);
   const m = Math.floor((parseInt(value) % 3600) / 60);
   return `${h > 0 ? `${h}hrs ` : 0} ${m > 0 && ` ${m}min`}`;
 }
 
+// Call function
 handleCategoryData();
-handleVideosData();

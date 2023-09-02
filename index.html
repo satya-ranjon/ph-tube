@@ -18,15 +18,16 @@
         id="sortVideos">
         Sort by view
       </button>
-      <button
+      <a
+        href="./blog.html"
         class="p-2 sm:px-4 font-normal text-white bg-[#ff1f3d] rounded-md">
         Blog
-      </button>
+      </a>
     </div>
 
     <!-- Category Bar -->
     <ul
-      class="w-full flex justify-center gap-4 items-center my-5 text-sm font-normal"
+      class="w-full flex justify-center gap-2 sm:gap-4 items-center my-5 text-sm font-normal"
       id="category_lists"></ul>
 
     <!-- Videos  -->
@@ -34,6 +35,7 @@
       class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4"
       id="videos"></div>
 
+    <!-- not Found message -->
     <div
       id="notFound"
       class="w-full flex flex-col justify-center items-center h-[600px] hidden">
